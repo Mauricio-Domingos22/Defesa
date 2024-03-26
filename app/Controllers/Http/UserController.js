@@ -61,6 +61,7 @@ class UserController {
 
     async login({ request, response, auth }) {
         try {
+            
             const { email, password } = request.only(['email', 'password']);
             const token = await auth.attempt(email, password);
             const user = await this.getCurrentUser(email);
