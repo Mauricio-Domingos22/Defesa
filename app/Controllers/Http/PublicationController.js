@@ -6,6 +6,9 @@
 /**
  * Resourceful controller for interacting with publications
  */
+
+const Database = use('Database');
+
 class PublicationController {
   /**
    * Show a list of all publications.
@@ -16,7 +19,7 @@ class PublicationController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async index ({ request, response, view }) {
+  async index({ request, response }) {
   }
 
   /**
@@ -28,43 +31,41 @@ class PublicationController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async create ({ request, response, view }) {
+  async store({ request, response }) {
+
+    try {
+
+      const payload = request.only(
+        [
+          "empresa",
+          "subject",
+          "body",
+          "date_publication",
+          "id_speciality"
+        ])
+
+
+      payload.date_publication = new Date()
+      payload.id_speciality = 1
+      payload.empresa = 1
+
+      const publication = await Database.table('publications').insert(payload)
+
+      if (publication) {
+
+        return response.created({ message: 'Publicação feita com sucesso', code: 200, data: publication })
+
+      } else {
+
+        return response.created({ message: 'Erro ao registar a publicação!', code: 201, data: publication })
+      }
+
+    } catch (error) {
+      console.log(error)
+      return response.created({ message: 'Erro ao registar a publicação!', code: 201, data: publication })
+    }
   }
 
-  /**
-   * Create/save a new publication.
-   * POST publications
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
-  async store ({ request, response }) {
-  }
-
-  /**
-   * Display a single publication.
-   * GET publications/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async show ({ params, request, response, view }) {
-  }
-
-  /**
-   * Render a form to update an existing publication.
-   * GET publications/:id/edit
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async edit ({ params, request, response, view }) {
-  }
 
   /**
    * Update publication details.
@@ -74,19 +75,9 @@ class PublicationController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async update ({ params, request, response }) {
+  async update({ params, request, response }) {
   }
 
-  /**
-   * Delete a publication with id.
-   * DELETE publications/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
-  async destroy ({ params, request, response }) {
-  }
 }
 
 module.exports = PublicationController

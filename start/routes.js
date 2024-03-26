@@ -26,3 +26,7 @@ Route.post('/city', 'CityController.create')
 Route.post('/typeuse', 'TypeUserController.create')
 Route.post('/profissao', 'ProfitionController.create')
 Route.post('/especialidade', 'EspecialityController.create')
+
+
+Route.post('/publication','PublicationController.store')
+
