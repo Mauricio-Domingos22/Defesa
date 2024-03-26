@@ -13,14 +13,12 @@ const UserController = require('../app/Controllers/Http/UserController')
 /** @type {typeof import('@adonisjs/framework/src/Route/Manager')} */
 const Route = use('Route')
 
-Route.post('/login',' AuthController.login')
-/*Route.resource('users', 'UserController')
+//Route.post('/login',' AuthController.login')
+Route.resource('users', 'UserController')
 .apiOnly()
-.validator(new Map([[['users.store'], ['StoreUser'] ]
+/*.validator(new Map([[['users.store'], ['StoreUser'] ]
 ]))*/
-
-Route.post('/users','UserController.store')
-
+Route.post('/login', 'UserController.login')
 Route.post('/gender','GenderController.create')
 Route.post('/city', 'CityController.create')
 Route.post('/typeuse', 'TypeUserController.create')

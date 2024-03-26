@@ -6,6 +6,7 @@
 /**
  * Resourceful controller for interacting with publications
  */
+
 class PublicationController {
   /**
    * Show a list of all publications.

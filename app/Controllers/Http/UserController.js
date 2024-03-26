@@ -59,6 +59,31 @@ class UserController {
         }
     }
 
+    async login({ request, response, auth }) {
+        try {
+            const { email, password } = request.only(['email', 'password']);
+            const token = await auth.attempt(email, password);
+            const user = await this.getCurrentUser(email);
+
+            console.log(user)
+            return response.ok({ token, user });
+        } catch (error) {
+            console.log(error)
+            return response.status(401).send({ message: 'Authentication failed' });
+        }
+    }
+
+    async getCurrentUser(email) {
+
+        const user = await Database
+            .select('users.*', 'type_users.slug as type_user')
+            .from('users')
+            .innerJoin('type_users', 'type_users.id', 'users.id_type_user')
+            .where('users.email', email)
+            .first()
+
+        return user
+    }
 }
 
 module.exports = UserController
