@@ -14,10 +14,12 @@ const UserController = require('../app/Controllers/Http/UserController')
 const Route = use('Route')
 
 Route.post('/login',' AuthController.login')
-Route.resource('users', 'UserController')
+/*Route.resource('users', 'UserController')
 .apiOnly()
 .validator(new Map([[['users.store'], ['StoreUser'] ]
-]))
+]))*/
+
+Route.post('/users','UserController.store')
 
 Route.post('/gender','GenderController.create')
 Route.post('/city', 'CityController.create')

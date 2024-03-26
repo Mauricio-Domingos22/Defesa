@@ -1,5 +1,5 @@
 'use strict'
-
+ const Complaint = use('App/Models/Complaint')
 /** @typedef {import('@adonisjs/framework/src/Request')} Request */
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
 /** @typedef {import('@adonisjs/framework/src/View')} View */
@@ -29,8 +29,12 @@ class ComplaintController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async create ({ request, response, view }) {
-  }
+  async create ({ request}) {
+    const datacom = request.only(["id_user", "subject", "body"])
+    const comp = await Complaint.create(datacom)
+    return comp
+    }
+  
 
   /**
    * Create/save a new complaint.
