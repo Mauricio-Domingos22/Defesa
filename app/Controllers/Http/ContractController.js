@@ -7,6 +7,7 @@
 /**
  * Resourceful controller for interacting with contracts
  */
+const Database = use('Database');
 class ContractController {
   /**
    * Show a list of all contracts.
@@ -47,44 +48,45 @@ class ContractController {
       const payload = request.only(
         [
           "freelancer",
-          "subject",
-          "body",
-          "date_publication",
-          "id_speciality"
+          "company",
+          "description",
+          "term",
+          "value",
+          "date_contract",
+          "number_prototype",
+          "signature_freelancer",
+          "signature_company"
         ])
 
 
-      payload.date_publication = new Date()
-      payload.id_speciality = 1
-      payload.empresa = 1
+      payload.date_contract = new Date()
+      payload.freelancer = 1
+      payload.company = 1
 
-      const publication = await Database.table('publications').insert(payload)
+      const contract = await Database.table('contracts').insert(payload)
 
-      if (publication) {
+      if (contract) {
 
-        return response.created({ message: 'Publicação feita com sucesso', code: 200, data: publication })
+        return response.created({ message: 'Contrato feito com sucesso', code: 200, data: contract })
 
       } else {
 
-        return response.created({ message: 'Erro ao registar a publicação!', code: 201, data: publication })
+        return response.created({ message: 'Erro ao registar ao efectuar o Contrato!', code: 201, data: contract })
       }
 
     } catch (error) {
       console.log(error)
-      return response.created({ message: 'Erro ao registar a publicação!', code: 201, data: publication })
+      return response.created({ message: 'Erro ao registar ao efectuar o Contrato!', code: 201, data: contract })
     }
   }
 
-  async getPublicationByUser({ auth }) {
+  async getContratoByUser({ auth }) {
 
-    const user_freelancer = await Database.select('*').from('user_freelancers').where('id_user', auth.user.id).first()
    
-
-     const publications = await Database.select('*').from('publications').where('id_speciality', user_freelancer.id_speciality)
-
+     const contrat= await Database.select('*').from('contracts')
+     
     const data = {
-      publications: publications,
-      user_freelancer: user_freelancer
+      contrat: contrat
     }
      
     

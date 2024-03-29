@@ -93,6 +93,8 @@ class UserController {
         .innerJoin('user_freelancers', ' users.id', 'user_freelancers.id_user')
         .where('users.id', auth.user.id)
         .first()
+
+    
    
          return user
 

@@ -3,7 +3,7 @@
 /** @type {import('@adonisjs/lucid/src/Schema')} */
 const Schema = use('Schema')
 
-class ContractSchema extends Schema {
+class ContractsSchema extends Schema {
   up () {
     this.create('contracts', (table) => {
       table.increments()
@@ -12,13 +12,13 @@ class ContractSchema extends Schema {
       .unsigned()
       .notNullable()
       .references("id")
-      .inTable("users").onUpdate('CASCADE').onDelete('CASCADE')
+      .inTable("user_freelancers").onUpdate('CASCADE').onDelete('CASCADE')
       table
       .integer("company")
       .unsigned()
       .notNullable()
       .references("id")
-      .inTable("users").onUpdate('CASCADE').onDelete('CASCADE')
+      .inTable("user_companies").onUpdate('CASCADE').onDelete('CASCADE')
       table.text('description')
       table.date('term')
       table.float('value')
@@ -35,4 +35,4 @@ class ContractSchema extends Schema {
   }
 }
 
-module.exports = ContractSchema
+module.exports = ContractsSchema

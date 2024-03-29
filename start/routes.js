@@ -2,6 +2,7 @@
 
 const AuthController = require('../app/Controllers/Http/AuthController')
 const CityController = require('../app/Controllers/Http/CityController')
+const ContractController = require('../app/Controllers/Http/ContractController')
 const EspecialityController = require('../app/Controllers/Http/EspecialityController')
 const GenderController = require('../app/Controllers/Http/GenderController')
 const InterestedController = require('../app/Controllers/Http/InterestedController')
@@ -36,6 +37,9 @@ Route.post('/submetido', 'InterestedController.store')
 Route.get('/subemetido_Publicaco', 'InterestedController.getSubmitedByUser').middleware('auth')
 
 Route.get('/perfil', 'UserController.perfil').middleware('auth')
+
+Route.post('/contrato','ContractController.store')
+Route.get('/mostarcontarto', 'ContractController.getContratoByUser')
 
 
 
