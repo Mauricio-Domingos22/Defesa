@@ -2,7 +2,6 @@
 
 const AuthController = require('../app/Controllers/Http/AuthController')
 const CityController = require('../app/Controllers/Http/CityController')
-const ContractController = require('../app/Controllers/Http/ContractController')
 const EspecialityController = require('../app/Controllers/Http/EspecialityController')
 const GenderController = require('../app/Controllers/Http/GenderController')
 const InterestedController = require('../app/Controllers/Http/InterestedController')
