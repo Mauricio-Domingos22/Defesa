@@ -5,12 +5,13 @@
 /** @typedef {import('@adonisjs/framework/src/View')} View */
 
 /**
- * Resourceful controller for interacting with contracts
+ * Resourceful controller for interacting with interesteds
  */
-class ContractController {
+const Database = use('Database');
+class InterestedController {
   /**
-   * Show a list of all contracts.
-   * GET contracts
+   * Show a list of all interesteds.
+   * GET interesteds
    *
    * @param {object} ctx
    * @param {Request} ctx.request
@@ -21,8 +22,8 @@ class ContractController {
   }
 
   /**
-   * Render a form to be used for creating a new contract.
-   * GET contracts/create
+   * Render a form to be used for creating a new interested.
+   * GET interesteds/create
    *
    * @param {object} ctx
    * @param {Request} ctx.request
@@ -33,8 +34,8 @@ class ContractController {
   }
 
   /**
-   * Create/save a new contract.
-   * POST contracts
+   * Create/save a new interested.
+   * POST interesteds
    *
    * @param {object} ctx
    * @param {Request} ctx.request
@@ -42,49 +43,54 @@ class ContractController {
    */
   async store({ request, response }) {
 
+    let submit;
+
     try {
 
       const payload = request.only(
         [
-          "freelancer",
-          "subject",
-          "body",
-          "date_publication",
-          "id_speciality"
+          "id_user_inteterested",
+          "id_user_publications",
+          "date_submit"
         ])
 
 
-      payload.date_publication = new Date()
-      payload.id_speciality = 1
-      payload.empresa = 1
+      payload.date_submit = new Date()
+      payload.id_user_publications = 1
+      payload.id_user_inteterested = 1
 
-      const publication = await Database.table('publications').insert(payload)
+      submit = await Database.table('interesteds').insert(payload)
 
-      if (publication) {
+      if (submit) {
 
-        return response.created({ message: 'Publicação feita com sucesso', code: 200, data: publication })
+        return response.created({ message: 'Subemetido com sucesso', code: 200, data: submit })
 
       } else {
 
-        return response.created({ message: 'Erro ao registar a publicação!', code: 201, data: publication })
+        return response.created({ message: 'Erro ao submeter!', code: 201, data: submit })
       }
 
     } catch (error) {
       console.log(error)
-      return response.created({ message: 'Erro ao registar a publicação!', code: 201, data: publication })
+    return response.created({ message: 'Erro ao submeter!', code: 201, data: submit })
     }
   }
 
-  async getPublicationByUser({ auth }) {
 
-    const user_freelancer = await Database.select('*').from('user_freelancers').where('id_user', auth.user.id).first()
+
+
+  
+  async getSubmitedByUser({ auth }) {
+
+    const user_company = await Database.select('*').from('user_companies').where('id_user', auth.user.id).first()
    
+    const queryBuilder = Database.select('*').from('interesteds').where('id_user_publications', user_company.id_user_publications);
+    console.log(queryBuilder.toQuery());
 
-     const publications = await Database.select('*').from('publications').where('id_speciality', user_freelancer.id_speciality)
 
     const data = {
-      publications: publications,
-      user_freelancer: user_freelancer
+      submited: submited,
+      user_company: user_company
     }
      
     
@@ -93,9 +99,12 @@ class ContractController {
   }
 
 
+
+
+
   /**
-   * Display a single contract.
-   * GET contracts/:id
+   * Display a single interested.
+   * GET interesteds/:id
    *
    * @param {object} ctx
    * @param {Request} ctx.request
@@ -106,8 +115,8 @@ class ContractController {
   }
 
   /**
-   * Render a form to update an existing contract.
-   * GET contracts/:id/edit
+   * Render a form to update an existing interested.
+   * GET interesteds/:id/edit
    *
    * @param {object} ctx
    * @param {Request} ctx.request
@@ -118,8 +127,8 @@ class ContractController {
   }
 
   /**
-   * Update contract details.
-   * PUT or PATCH contracts/:id
+   * Update interested details.
+   * PUT or PATCH interesteds/:id
    *
    * @param {object} ctx
    * @param {Request} ctx.request
@@ -129,8 +138,8 @@ class ContractController {
   }
 
   /**
-   * Delete a contract with id.
-   * DELETE contracts/:id
+   * Delete a interested with id.
+   * DELETE interesteds/:id
    *
    * @param {object} ctx
    * @param {Request} ctx.request
@@ -140,4 +149,4 @@ class ContractController {
   }
 }
 
-module.exports = ContractController
+module.exports = InterestedController

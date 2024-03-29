@@ -67,6 +67,23 @@ class PublicationController {
     }
   }
 
+  async getPublicationByUser({ auth }) {
+
+    const user_freelancer = await Database.select('*').from('user_freelancers').where('id_user', auth.user.id).first()
+   
+
+     const publications = await Database.select('*').from('publications').where('id_speciality', user_freelancer.id_speciality)
+
+    const data = {
+      publications: publications,
+      user_freelancer: user_freelancer
+    }
+     
+    
+    
+    return data
+  }
+
 
   /**
    * Update publication details.
@@ -79,6 +96,23 @@ class PublicationController {
   async update({ params, request, response }) {
   }
 
+  async show({params}){
+
+    const publication = await Database.findOrFail(params.id)
+
+    return publication
+
+  }
+  async destroy({params,auth,res}){
+
+    const publication = await Database.findOrFail(params.id)
+   if(publication.empresa !== auth.empresa){
+    return response.status(401)
+   }
+    await publication.delete()
+    return publication
+
+  }
 }
 
 module.exports = PublicationController

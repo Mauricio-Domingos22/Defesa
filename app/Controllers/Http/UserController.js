@@ -85,6 +85,19 @@ class UserController {
 
         return user
     }
+
+    async perfil({auth}){
+
+        const user = await Database
+        .select('users.*', 'user_freelancers.id_speciality as especialidade')
+        .from('users')
+        .innerJoin('user_freelancers', ' users.id', 'user_freelancers.id_user')
+        .where('users.id', auth.user.id)
+        .first()
+   
+         return user
+
+    }
 }
 
 module.exports = UserController
