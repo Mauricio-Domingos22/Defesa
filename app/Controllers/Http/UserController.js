@@ -66,7 +66,6 @@ class UserController {
             const token = await auth.attempt(email, password);
             const user = await this.getCurrentUser(email);
 
-            console.log(user)
             return response.ok({ token, user });
         } catch (error) {
             console.log(error)
