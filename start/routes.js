@@ -41,6 +41,8 @@ Route.get('/perfil', 'UserController.perfil').middleware('auth')
 Route.post('/contrato','ContractController.store')
 Route.get('/mostarcontarto', 'ContractController.getContratoByUser')
 
+Route.get('/profissao','ProfitionController.index')
+
 
 
 

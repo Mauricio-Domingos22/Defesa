@@ -8,6 +8,7 @@
  * Resourceful controller for interacting with profitions
  */
 const Profission = use ('App/Models/Profition')
+const Database = use('Database');
 class ProfitionController {
   /**
    * Show a list of all profitions.
@@ -19,6 +20,15 @@ class ProfitionController {
    * @param {View} ctx.view
    */
   async index ({ request, response, view }) {
+    const profition= await Database.select('*').from('profitions')
+     
+    const data = {
+      profition: profition
+    }
+     
+    
+    
+    return data
   }
 
   /**
