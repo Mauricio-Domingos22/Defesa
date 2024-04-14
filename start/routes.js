@@ -37,6 +37,7 @@ Route.resource('/publicado', 'PublicationController').middleware('auth')
 Route.get('/publications_users_freelancer', 'PublicationController.getPublicationByUser').middleware('auth')
 
 Route.post('/submetido', 'InterestedController.store')
+Route.get('/get-user-freelancer-publications', 'InterestedController.getUserFreelancerPublications')
 Route.get('/subemetido_Publicaco', 'InterestedController.getSubmitedByUser').middleware('auth')
 Route.resource('/subemeter', 'InterestedController')
 
