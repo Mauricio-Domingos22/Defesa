@@ -112,6 +112,11 @@ class UserController {
             return { error: 'Erro ao buscar perfil do usuário' };
         }
     }
+
+async destroy ({ params}) {
+    const contract = await User.findOrFail(params.id)
+    await contract.delete();
+  }
 }
 
 module.exports = UserController

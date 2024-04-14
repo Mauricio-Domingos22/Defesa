@@ -27,7 +27,9 @@ Route.resource('/city', 'CityController')
 Route.post('/typeuse', 'TypeUserController.create')
 Route.post('/profissao', 'ProfitionController.create')
 Route.resource('/profition', 'ProfitionController')
+Route.post('/profitions', 'ProfitionController.create')
 Route.resource('/especialidade', 'EspecialityController')
+Route.post('/especialidades', 'EspecialityController.create')
 Route.resource('/groupespecialidade','EspecialityController')
 
 
