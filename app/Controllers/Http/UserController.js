@@ -61,7 +61,7 @@ class UserController {
 
     async login({ request, response, auth }) {
         try {
-            
+
             const { email, password } = request.only(['email', 'password']);
             const token = await auth.attempt(email, password);
             const user = await this.getCurrentUser(email);
@@ -85,19 +85,32 @@ class UserController {
         return user
     }
 
-    async perfil({auth}){
-
-        const user = await Database
-        .select('users.*', 'user_freelancers.id_speciality as especialidade')
-        .from('users')
-        .innerJoin('user_freelancers', ' users.id', 'user_freelancers.id_user')
-        .where('users.id', auth.user.id)
-        .first()
-
+    async perfil({ auth }) {
+        try {
+            const user = await Database
+                .select('users.*', 'user_freelancers.id_speciality as especialidade')
+                .from('users')
+                .innerJoin('user_freelancers', 'users.id', 'user_freelancers.id_user')
+                .where('users.id', auth.user.id)
+                .first();
     
-   
-         return user
-
+            if (!user) {
+                return { error: 'Usuário não encontrado' };
+            }
+    
+            const specialty = await Database
+                .select('especialities.description as especialidade')
+                .from('user_freelancers')
+                .innerJoin('especialities', 'user_freelancers.id_speciality', 'especialities.id')
+                .where('user_freelancers.id_user', auth.user.id);
+    
+            user.especialidade = specialty;
+    
+            return { user };
+        } catch (error) {
+            console.error('Erro ao buscar perfil do usuário:', error);
+            return { error: 'Erro ao buscar perfil do usuário' };
+        }
     }
 }
 

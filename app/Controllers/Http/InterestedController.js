@@ -7,6 +7,7 @@
 /**
  * Resourceful controller for interacting with interesteds
  */
+const Interest = use('App/Models/Interested')
 const Database = use('Database');
 class InterestedController {
   /**
@@ -112,6 +113,9 @@ class InterestedController {
    * @param {View} ctx.view
    */
   async show ({ params, request, response, view }) {
+    const submeter = await Interest.findOrFail(params.id)
+    
+    return submeter
   }
 
   /**
@@ -146,6 +150,8 @@ class InterestedController {
    * @param {Response} ctx.response
    */
   async destroy ({ params, request, response }) {
+    const submeter = await Interest.findOrFail(params.id)
+    await submeter.delete();
   }
 }
 

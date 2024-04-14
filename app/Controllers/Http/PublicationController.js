@@ -6,7 +6,7 @@
 /**
  * Resourceful controller for interacting with publications
  */
-
+const Publicate = use('App/Models/Publication')
 const Database = use('Database');
 
 
@@ -21,6 +21,8 @@ class PublicationController {
    * @param {View} ctx.view
    */
   async index({ request, response }) {
+    const publicat = await Publicate.query().with('userComp').fetch()
+    return publicat;
   }
 
   /**

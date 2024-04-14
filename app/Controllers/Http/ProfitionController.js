@@ -101,6 +101,8 @@ class ProfitionController {
    * @param {Response} ctx.response
    */
   async destroy ({ params, request, response }) {
+    const submeter = await Profission.findOrFail(params.id)
+    await submeter.delete();
   }
 }
 

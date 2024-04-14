@@ -7,7 +7,11 @@
 /**
  * Resourceful controller for interacting with contracts
  */
+
+const Contract = use('App/Models/Contract')
 const Database = use('Database');
+
+
 class ContractController {
   /**
    * Show a list of all contracts.
@@ -19,6 +23,11 @@ class ContractController {
    * @param {View} ctx.view
    */
   async index ({ request, response, view }) {
+    const verContrato = await Database
+    .select('*')
+    .from('contracts')
+
+  return verContrato
   }
 
   /**
@@ -41,21 +50,18 @@ class ContractController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async store({ request, response }) {
-
+  async store ({ request, response }) {
     try {
 
       const payload = request.only(
         [
           "freelancer",
           "company",
-          "description",
+          "descriptionService",
           "term",
           "value",
           "date_contract",
           "number_prototype",
-          "signature_freelancer",
-          "signature_company"
         ])
 
 
@@ -80,20 +86,46 @@ class ContractController {
     }
   }
 
+
   async getContratoByUser({ auth }) {
+    // if (!auth || !auth.user || !auth.user.id) {
+    //     return null;
+    // }
 
-   
-     const contrat= await Database.select('*').from('contracts')
-     
-    const data = {
-      contrat: contrat
-    }
-     
-    
-    
-    return data
-  }
+    // const userId = auth.user.id;
 
+    // const UserFreelancer = await Database
+    //     .select('users.*', 'user_freelancers.id as id')
+    //     .from('users')
+    //     .leftJoin('user_freelancers', 'users.id', 'user_freelancers.id_user') // Usando leftJoin para garantir que mesmo que não haja freelancer, os dados de usuário ainda sejam retornados
+    //     .where('users.id', userId)
+    //     .first();
+
+    // const UserCompany = await Database
+    //     .select('users.*', 'user_companies.id as id')
+    //     .from('users')
+    //     .leftJoin('user_companies', 'users.id', 'user_companies.id_user') // Usando leftJoin para garantir que mesmo que não haja empresa, os dados de usuário ainda sejam retornados
+    //     .where('users.id', userId)
+    //     .first();
+
+    // let contratos = [];
+    // if (UserFreelancer) {
+    //     // Consultar contratos apenas se houver um freelancer associado
+    //     contratos = await Database
+    //         .select('*')
+    //         .from('contracts')
+    //         .where('id_freelancer', UserFreelancer.id);
+    // }
+
+    // const data = {
+    //     UserFreelancer: UserFreelancer,
+    //     UserCompany: UserCompany,
+    //     contratos: contratos
+    // };
+
+    // return data;
+
+}
 
   /**
    * Display a single contract.
@@ -128,6 +160,27 @@ class ContractController {
    * @param {Response} ctx.response
    */
   async update ({ params, request, response }) {
+    try {
+      const contract = await Contract.findOrFail(params.id)
+      const data = request.only([
+        'descriptionService',
+        'term',
+        'value',
+        'date_contract',
+        'number_prototype',
+      ])
+      contract.merge(data)
+      await contract.save()
+
+      return response.status(200).send(contract)
+
+    } catch (error) {
+      console.error(error)
+      if (error.name === 'ModelNotFoundException') {
+        return response.status(404).send({ error: 'contrato nao encontrado' })
+      }
+      return response.status(500).send({ error: 'Ocorreu um erro ao editar o contrato.' });
+    }
   }
 
   /**
@@ -139,6 +192,8 @@ class ContractController {
    * @param {Response} ctx.response
    */
   async destroy ({ params, request, response }) {
+    const contract = await Contract.findOrFail(params.id)
+    await contract.delete();
   }
 }
 

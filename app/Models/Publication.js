@@ -4,6 +4,9 @@
 const Model = use('Model')
 
 class Publication extends Model {
+    userComp(){
+        this.belongsTo('App/Models/UserCompany')
+    }
 }
 
 module.exports = Publication

@@ -8,6 +8,7 @@
  * Resourceful controller for interacting with especialities
  */
 const Specility = use ('App/Models/Especiality')
+const Database = use('Database')
 class EspecialityController {
   /**
    * Show a list of all especialities.
@@ -19,6 +20,12 @@ class EspecialityController {
    * @param {View} ctx.view
    */
   async index ({ request, response, view }) {
+    const specialties = await Database.select('*').from('especialities')
+    const data = {
+      specialties: specialties
+    }
+
+    return data
   }
 
   /**
@@ -57,6 +64,10 @@ class EspecialityController {
    * @param {View} ctx.view
    */
   async show ({ params, request, response, view }) {
+    const { id } = params;
+    const specialties = await Specility.query().where('id_profition', id).fetch();
+
+    return specialties;
   }
 
   /**
@@ -92,6 +103,7 @@ class EspecialityController {
    */
   async destroy ({ params, request, response }) {
   }
+ 
 }
 
 module.exports = EspecialityController

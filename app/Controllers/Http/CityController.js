@@ -8,6 +8,7 @@
  * Resourceful controller for interacting with cities
  */
 const Cit = use ('App/Models/City')
+const Database = use ('Database')
 class CityController {
   /**
    * Show a list of all cities.
@@ -19,6 +20,12 @@ class CityController {
    * @param {View} ctx.view
    */
   async index ({ request, response, view }) {
+    const city = await Database.select('*').from('cities')
+
+    const data = {
+      city:city
+    }
+    return data
   }
 
   /**
