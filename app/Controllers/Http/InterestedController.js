@@ -19,7 +19,7 @@ class InterestedController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async index ({ request, response, view }) {
+  async index({ request, response, view }) {
   }
 
   /**
@@ -31,7 +31,7 @@ class InterestedController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async create ({ request, response, view }) {
+  async create({ request, response, view }) {
   }
 
   /**
@@ -73,18 +73,18 @@ class InterestedController {
 
     } catch (error) {
       console.log(error)
-    return response.created({ message: 'Erro ao submeter!', code: 201, data: submit })
+      return response.created({ message: 'Erro ao submeter!', code: 201, data: submit })
     }
   }
 
 
 
 
-  
+
   async getSubmitedByUser({ auth }) {
 
     const user_company = await Database.select('*').from('user_companies').where('id_user', auth.user.id).first()
-   
+
     const queryBuilder = Database.select('*').from('interesteds').where('id_user_publications', user_company.id_user_publications);
     console.log(queryBuilder.toQuery());
 
@@ -93,12 +93,23 @@ class InterestedController {
       submited: submited,
       user_company: user_company
     }
-     
-    
-    
+
+
+
     return data
   }
 
+
+  async getUserFreelancerPublications({ params, request, response }) {
+
+    const interesteds = await Interest.query()
+      .with('users_frelancer.user')
+      .with('publications')
+      .fetch()
+
+    return interesteds
+
+  }
 
 
 
@@ -112,9 +123,9 @@ class InterestedController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async show ({ params, request, response, view }) {
+  async show({ params, request, response, view }) {
     const submeter = await Interest.findOrFail(params.id)
-    
+
     return submeter
   }
 
@@ -127,7 +138,7 @@ class InterestedController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async edit ({ params, request, response, view }) {
+  async edit({ params, request, response, view }) {
   }
 
   /**
@@ -138,7 +149,7 @@ class InterestedController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async update ({ params, request, response }) {
+  async update({ params, request, response }) {
   }
 
   /**
@@ -149,7 +160,7 @@ class InterestedController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async destroy ({ params, request, response }) {
+  async destroy({ params, request, response }) {
     const submeter = await Interest.findOrFail(params.id)
     await submeter.delete();
   }
