@@ -66,7 +66,14 @@ class ProfitionController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async show ({ params, request, response, view }) {
+  async GetEspecialidadByProfissao ({ params, request, response }) {
+
+    const id_profition = params.id_profition
+
+    const especialidades = await Database.select('*').from('especialities').where('id_profition', id_profition)
+
+    return especialidades
+    
   }
 
   /**
