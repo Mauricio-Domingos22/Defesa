@@ -18,7 +18,7 @@ class UserFreelancerController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async index ({ request, response, view }) {
+  async index({ request, response, view }) {
   }
 
   /**
@@ -30,7 +30,7 @@ class UserFreelancerController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async create ({ request, response, view }) {
+  async create({ request, response, view }) {
   }
 
   /**
@@ -41,7 +41,7 @@ class UserFreelancerController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async store ({ request, response }) {
+  async store({ request, response }) {
   }
 
   /**
@@ -53,7 +53,7 @@ class UserFreelancerController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async show ({ params, request, response, view }) {
+  async show({ params, request, response, view }) {
   }
 
   /**
@@ -65,7 +65,7 @@ class UserFreelancerController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async edit ({ params, request, response, view }) {
+  async edit({ params, request, response, view }) {
   }
 
   /**
@@ -76,7 +76,7 @@ class UserFreelancerController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async update ({ params, request, response }) {
+  async update({ params, request, response }) {
   }
 
   /**
@@ -87,18 +87,20 @@ class UserFreelancerController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async destroy ({ params, request, response }) {
+  async destroy({ params, request, response }) {
   }
-  async getFreelancerPerfil({params}){
+  async getFreelancerPerfil({ params }) {
 
     const user = await Database
-    .select('users.*')
-    .from('user_freelancers')
-    .leftJoin('users','users.id','user_freelancers.id_user')
-    .where('user_freelancers.id_user',params.id)
-    
+      .select('users.*','especialities.description as especiality')
+      .from('user_freelancers')
+      .leftJoin('users', 'users.id', 'user_freelancers.id_user')
+      .leftJoin('especialities', 'especialities.id', 'user_freelancers.id_speciality')
+      .where('user_freelancers.id_user', params.id)
+      .first()
+
     return user
-    
+
   }
 
 }
