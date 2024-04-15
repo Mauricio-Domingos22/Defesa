@@ -7,6 +7,7 @@
 /**
  * Resourceful controller for interacting with userfreelancers
  */
+const Database = use('Database')
 class UserFreelancerController {
   /**
    * Show a list of all userfreelancers.
@@ -88,6 +89,18 @@ class UserFreelancerController {
    */
   async destroy ({ params, request, response }) {
   }
+  async getFreelancerPerfil({params}){
+
+    const user = await Database
+    .select('users.*')
+    .from('user_freelancers')
+    .leftJoin('users','users.id','user_freelancers.id_user')
+    .where('user_freelancers.id_user',params.id)
+    
+    return user
+    
+  }
+
 }
 
 module.exports = UserFreelancerController

@@ -9,6 +9,7 @@ const ProfitionController = require('../app/Controllers/Http/ProfitionController
 const PublicationController = require('../app/Controllers/Http/PublicationController')
 const TypeUserController = require('../app/Controllers/Http/TypeUserController')
 const UserController = require('../app/Controllers/Http/UserController')
+const UserFreelancerController = require('../app/Controllers/Http/UserFreelancerController')
 
 
 
@@ -51,6 +52,8 @@ Route.resource('/contrato', 'ContractController')
 Route.get('/mostarcontarto', 'ContractController.getContratoByUser')
 
 Route.get('/profissao', 'ProfitionController.index')
+
+Route.get('/usuariodados/:id', 'UserFreelancerController.getFreelancerPerfil')
 
 
 
