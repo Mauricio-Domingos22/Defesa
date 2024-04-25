@@ -60,7 +60,9 @@ Route.get('/usuariodados/:id', 'UserFreelancerController.getFreelancerPerfil')
 
 Route.resource('/queixa', 'ComplaintController')
 
+Route.get("/list-portfolio", "PortifolioController.index").middleware('auth')
 Route.post("/save-portfolio", "PortifolioController.store").middleware('auth')
+Route.get('tmp/portfolio/:filename', 'PortifolioController.previewFile')
 
 
 

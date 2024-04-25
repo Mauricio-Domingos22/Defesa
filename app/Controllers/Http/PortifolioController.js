@@ -10,8 +10,33 @@
 
 const UploadFile = use('App/Models/UploadFile');
 const Database = use('Database');
+const Helpers = use('Helpers')
 
 class PortifolioController {
+
+  typeOfFile = {
+    application: {
+      pdf: 'pdf',
+      xlsx: 'xlsx',
+      docx: 'docx'
+    },
+    image: {
+      png: 'png',
+      jpg: 'jpg',
+      jpeg: 'jpeg'
+    }
+  }
+
+  validationFile = () => {
+    let validationOptions = {
+      types: ['image', 'application'],
+      size: '5mb',
+      extnames: ['pdf', 'PDF', 'xlsx', 'XLSX', 'docx',
+        'DOCX', 'png', 'PNG', 'jpg', 'JPG', 'jpeg', 'JPEG']
+    }
+    return validationOptions
+  }
+
   /**
    * Show a list of all portifolios.
    * GET portifolios
@@ -21,8 +46,13 @@ class PortifolioController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async index({ request, response }) {
+  async index({ auth }) {
 
+    let user_freelancer = await this.getUserFreelancer(auth.user.id)
+
+    const portifolios = await Database.select('*').from('portifolios').where('id_freelancer', user_freelancer.id)
+
+    return portifolios
   }
 
 
@@ -72,27 +102,28 @@ class PortifolioController {
 
   }
 
-  /**
-   * Render a form to update an existing portifolio.
-   * GET portifolios/:id/edit
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async edit({ params, request, response }) {
-  }
+  async previewFile({ params, response }) {
 
-  /**
-   * Update portifolio details.
-   * PUT or PATCH portifolios/:id
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
-  async update({ params, request, response }) {
+    try {
+
+      const filename = params.filename.trim()
+
+      const findComa = filename.indexOf(".")
+      const subString = filename.substr(findComa + 1, filename.length)
+
+      var path = 'portfolio'
+
+      if (this.typeOfFile.image[subString]) {
+        return response.download(Helpers.tmpPath(`${path}/${filename}`))
+      } else {
+        if (this.typeOfFile.application[subString]) {
+          return response.download(Helpers.tmpPath(`${path}/${filename}`))
+        }
+      }
+
+    } catch (error) {
+      console.log(error)
+    }
   }
 
 }
