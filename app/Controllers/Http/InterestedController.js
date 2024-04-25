@@ -42,7 +42,19 @@ class InterestedController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async store({ request, response }) {
+
+  async getUserFreelancer(id_user) {
+
+    const user_freelancer = await Database
+      .select('*')
+      .from('user_freelancers')
+      .where('user_freelancers.id_user', id_user)
+      .first()
+
+    return user_freelancer
+  }
+
+  async store({ request, response, auth }) {
 
     let submit;
 
@@ -55,10 +67,11 @@ class InterestedController {
           "date_submit"
         ])
 
+      let user_freelancer = await this.getUserFreelancer(auth.user.id)
 
       payload.date_submit = new Date()
-      payload.id_user_publications = 1
-      payload.id_user_inteterested = 1
+      payload.id_user_publications = payload.id_user_publications
+      payload.id_user_inteterested = user_freelancer.id
 
       submit = await Database.table('interesteds').insert(payload)
 
