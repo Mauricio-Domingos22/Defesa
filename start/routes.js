@@ -34,7 +34,7 @@ Route.resource('/profition', 'ProfitionController')
 Route.post('/profitions', 'ProfitionController.create')
 Route.resource('/especialidade', 'EspecialityController')
 Route.post('/especialidades', 'EspecialityController.create')
-Route.resource('/groupespecialidade','EspecialityController')
+Route.resource('/groupespecialidade', 'EspecialityController')
 Route.resource('/groupespecialidade', 'EspecialityController')
 
 
@@ -59,6 +59,8 @@ Route.get('/profissao', 'ProfitionController.index')
 Route.get('/usuariodados/:id', 'UserFreelancerController.getFreelancerPerfil')
 
 Route.resource('/queixa', 'ComplaintController')
+
+Route.post("/save-portfolio", "PortifolioController.store").middleware('auth')
 
 
 
