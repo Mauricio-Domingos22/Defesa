@@ -72,17 +72,21 @@ class PublicationController {
   async getPublicationByUser({ auth }) {
 
     const user_freelancer = await Database.select('*').from('user_freelancers').where('id_user', auth.user.id).first()
-   
 
-     const publications = await Database.select('*').from('publications').where('id_speciality', user_freelancer.id_speciality)
+
+    const publications = await Database
+      .select('publications.*', 'users.username as empresa')
+      .from('publications')
+      .innerJoin('user_companies', 'user_companies.id', 'publications.empresa')
+      .innerJoin('users', 'users.id', 'user_companies.id_user')
+      .where('id_speciality', user_freelancer.id_speciality)
+      .orderBy("id", "desc")
 
     const data = {
       publications: publications,
       user_freelancer: user_freelancer
     }
-     
-    
-    
+
     return data
   }
 
@@ -98,19 +102,19 @@ class PublicationController {
   async update({ params, request, response }) {
   }
 
-  async show({params}){
+  async show({ params }) {
 
     const publication = await Database.findOrFail(params.id)
 
     return publication
 
   }
-  async destroy({params,auth,res}){
+  async destroy({ params, auth, res }) {
 
     const publication = await Database.findOrFail(params.id)
-   if(publication.empresa !== auth.empresa){
-    return response.status(401)
-   }
+    if (publication.empresa !== auth.empresa) {
+      return response.status(401)
+    }
     await publication.delete()
     return publication
 
