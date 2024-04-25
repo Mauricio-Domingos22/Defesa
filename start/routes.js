@@ -2,6 +2,8 @@
 
 const AuthController = require('../app/Controllers/Http/AuthController')
 const CityController = require('../app/Controllers/Http/CityController')
+const ComplaintController = require('../app/Controllers/Http/ComplaintController')
+const ContratoController = require('../app/Controllers/Http/ContratoController')
 const EspecialityController = require('../app/Controllers/Http/EspecialityController')
 const GenderController = require('../app/Controllers/Http/GenderController')
 const InterestedController = require('../app/Controllers/Http/InterestedController')
@@ -47,13 +49,16 @@ Route.resource('/subemeter', 'InterestedController')
 
 Route.get('/perfil', 'UserController.perfil').middleware('auth')
 
-Route.resource('/contrato', 'ContractController')
+Route.resource('/contrato', 'ContratoController')
+Route.post('/updatecontrato', 'ContratoController.updateContrato')
 
-Route.get('/mostarcontarto', 'ContractController.getContratoByUser')
+Route.get('/mostarcontarto', 'ContractController.getContratoByUser').middleware('auth')
 
 Route.get('/profissao', 'ProfitionController.index')
 
 Route.get('/usuariodados/:id', 'UserFreelancerController.getFreelancerPerfil')
+
+Route.resource('/queixa', 'ComplaintController')
 
 
 

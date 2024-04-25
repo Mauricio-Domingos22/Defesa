@@ -8,14 +8,14 @@ class ComplaintSchema extends Schema {
     this.create('complaints', (table) => {
       table.increments()
       table
-      .integer("id_user")
+      .integer("id_contrato")
       .unsigned()
       .notNullable()
       .references("id")
-      .inTable("users").onUpdate('CASCADE').onDelete('CASCADE')
-      table.string('entity_name',80).notNullable()
-      table.string('subject',150).notNullable()
-      table.string('body',240).notNullable()
+      .inTable("contratos").onUpdate('CASCADE').onDelete('CASCADE')
+      table.date('date_complaint')
+      table.string('descriptioncomplaint',245)
+      table.string('arquivo',245)
       table.timestamps()
     })
   }

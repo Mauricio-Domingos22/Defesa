@@ -8,13 +8,13 @@ class PaymentSchema extends Schema {
     this.create('payments', (table) => {
       table.increments()
       table
-      .integer("type_payment")
+      .integer("id_contrato")
       .unsigned()
       .notNullable()
       .references("id")
-      .inTable("type_payments").onUpdate('CASCADE').onDelete('CASCADE')
-      table.float('value')
+      .inTable("contratos").onUpdate('CASCADE').onDelete('CASCADE')
       table.date('date_payment')
+      table.string('comprovativo',245)
       table.timestamps()
     })
   }

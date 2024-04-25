@@ -5,12 +5,12 @@
 /** @typedef {import('@adonisjs/framework/src/View')} View */
 
 /**
- * Resourceful controller for interacting with finances
+ * Resourceful controller for interacting with statuses
  */
-class FinanceController {
+class StatusController {
   /**
-   * Show a list of all finances.
-   * GET finances
+   * Show a list of all statuses.
+   * GET statuses
    *
    * @param {object} ctx
    * @param {Request} ctx.request
@@ -21,8 +21,8 @@ class FinanceController {
   }
 
   /**
-   * Render a form to be used for creating a new finance.
-   * GET finances/create
+   * Render a form to be used for creating a new status.
+   * GET statuses/create
    *
    * @param {object} ctx
    * @param {Request} ctx.request
@@ -33,8 +33,8 @@ class FinanceController {
   }
 
   /**
-   * Create/save a new finance.
-   * POST finances
+   * Create/save a new status.
+   * POST statuses
    *
    * @param {object} ctx
    * @param {Request} ctx.request
@@ -44,8 +44,8 @@ class FinanceController {
   }
 
   /**
-   * Display a single finance.
-   * GET finances/:id
+   * Display a single status.
+   * GET statuses/:id
    *
    * @param {object} ctx
    * @param {Request} ctx.request
@@ -56,8 +56,8 @@ class FinanceController {
   }
 
   /**
-   * Render a form to update an existing finance.
-   * GET finances/:id/edit
+   * Render a form to update an existing status.
+   * GET statuses/:id/edit
    *
    * @param {object} ctx
    * @param {Request} ctx.request
@@ -68,8 +68,8 @@ class FinanceController {
   }
 
   /**
-   * Update finance details.
-   * PUT or PATCH finances/:id
+   * Update status details.
+   * PUT or PATCH statuses/:id
    *
    * @param {object} ctx
    * @param {Request} ctx.request
@@ -79,8 +79,8 @@ class FinanceController {
   }
 
   /**
-   * Delete a finance with id.
-   * DELETE finances/:id
+   * Delete a status with id.
+   * DELETE statuses/:id
    *
    * @param {object} ctx
    * @param {Request} ctx.request
@@ -90,4 +90,4 @@ class FinanceController {
   }
 }
 
-module.exports = FinanceController
+module.exports = StatusController

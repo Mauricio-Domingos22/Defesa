@@ -71,6 +71,7 @@ class ProfitionController {
     const id_profition = params.id_profition
 
     const especialidades = await Database.select('*').from('especialities').where('id_profition', id_profition)
+    
 
     return especialidades
     

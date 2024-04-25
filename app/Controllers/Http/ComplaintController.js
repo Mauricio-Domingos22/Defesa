@@ -1,5 +1,5 @@
 'use strict'
- const Complaint = use('App/Models/Complaint')
+
 /** @typedef {import('@adonisjs/framework/src/Request')} Request */
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
 /** @typedef {import('@adonisjs/framework/src/View')} View */
@@ -29,12 +29,8 @@ class ComplaintController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async create ({ request}) {
-    const datacom = request.only(["id_user", "subject", "body"])
-    const comp = await Complaint.create(datacom)
-    return comp
-    }
-  
+  async create ({ request, response, view }) {
+  }
 
   /**
    * Create/save a new complaint.
@@ -45,7 +41,39 @@ class ComplaintController {
    * @param {Response} ctx.response
    */
   async store ({ request, response }) {
+    try {
+
+      const payload = request.only(
+        [
+          "id_contrato",
+          "date_complaint",
+          "descriptioncomplaint",
+           "arquivo"
+
+        ])
+
+
+      payload.date_complaint = new Date()
+      payload.id_contrato = 1
+
+
+      const contract = await Database.table('complaints').insert(payload)
+
+      if (contract) {
+
+        return response.created({ message: 'Denuncia feita com sucesso', code: 200, data: contract })
+
+      } else {
+
+        return response.created({ message: 'Erro ao registar ao efectuar a denuncia!', code: 201, data: contract })
+      }
+
+    } catch (error) {
+      console.log(error)
+      return response.created({ message: 'Erro ao registar ao efectuar  a denuncia!', code: 201, data: contract })
+    }
   }
+
 
   /**
    * Display a single complaint.

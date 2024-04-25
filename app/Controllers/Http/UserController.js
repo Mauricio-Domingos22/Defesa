@@ -94,9 +94,9 @@ class UserController {
                 .where('users.id', auth.user.id)
                 .first();
     
-            if (!user) {
+        if (!user) {
                 return { error: 'Usuário não encontrado' };
-            }
+         }
     
             const specialty = await Database
                 .select('especialities.description as especialidade')
