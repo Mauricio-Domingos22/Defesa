@@ -46,14 +46,17 @@ class PortifolioController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async index({ auth }) {
-
-    let user_freelancer = await this.getUserFreelancer(auth.user.id)
-
-    const portifolios = await Database.select('*').from('portifolios').where('id_freelancer', user_freelancer.id)
-
-    return portifolios
+  async index({ auth, response }) {
+    try {
+      let user_freelancer = await this.getUserFreelancer(auth.user.id);
+      const portfolios = await Database.select('*').from('portifolios').where('id_freelancer', user_freelancer.id);
+      return portfolios;
+    } catch (error) {
+      console.error("Erro ao obter portfólios:", error);
+      return response.status(500).send({ error: "Erro interno do servidor ao obter portfólios." });
+    }
   }
+  
 
 
   /**

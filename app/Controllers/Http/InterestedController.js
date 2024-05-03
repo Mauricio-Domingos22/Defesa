@@ -94,12 +94,17 @@ class InterestedController {
 
 
 
-  async getSubmitedByUser({ auth }) {
+  async getSubmitedByUser({ auth,params }) {
 
     const user_company = await Database.select('*').from('user_companies').where('id_user', auth.user.id).first()
 
-    const queryBuilder = Database.select('*').from('interesteds').where('id_user_publications', user_company.id_user_publications);
-    console.log(queryBuilder.toQuery());
+    // const queryBuilder = Database.select('*').from('interesteds').where('id_user_publications', user_company.id_user_publications);
+    // console.log(queryBuilder.toQuery());
+    const publicationId = params.id;
+
+    const submited = await Database.select('*')
+            .from('interesteds')
+            .where('id_user_publications', publicationId);
 
 
     const data = {

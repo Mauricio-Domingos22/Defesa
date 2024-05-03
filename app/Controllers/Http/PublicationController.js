@@ -33,8 +33,38 @@ class PublicationController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    * @param {View} ctx.view
+   * 
    */
-  async store({ request, response }) {
+
+  async getEspeciality(id) {
+    try {
+      console.log("ID recebido em getEspeciality:", id);
+      const especiality = await Database
+        .select('*')
+        .from('especialities')
+        .where('id', id)
+        .first();
+      console.log("Especialidade encontrada:", especiality);
+      return especiality;
+    } catch (error) {
+      console.error("Erro em getEspeciality:", error);
+      throw error;
+    }
+  }
+  
+  
+
+  async getUserCompany(id_user) {
+
+    const user_company = await Database
+      .select('*')
+      .from('user_companies')
+      .where('user_companies.id_user', id_user)
+      .first()
+
+    return user_company
+  }
+  async store({ request, response,auth}) {
 
     try {
 
@@ -47,10 +77,17 @@ class PublicationController {
           "id_speciality"
         ])
 
+       let user_companies = await this.getUserCompany(auth.user.id)
+       console.log("ID da especialidade:", payload.id_speciality);
+       const especiality = await this.getEspeciality(payload.id_speciality);
+       
+       if (!especiality) {
+         return response.created({ message: 'Especialidade não encontrada!', code: 404 });
+       }
 
       payload.date_publication = new Date()
-      payload.id_speciality = 1
-      payload.empresa = 1
+      payload.id_speciality = especiality.id;
+      payload.empresa = user_companies.id
 
       const publication = await Database.table('publications').insert(payload)
 

@@ -38,7 +38,7 @@ Route.resource('/groupespecialidade', 'EspecialityController')
 Route.resource('/groupespecialidade', 'EspecialityController')
 
 
-Route.post('/publication', 'PublicationController.store')
+Route.post('/publication', 'PublicationController.store').middleware('auth')
 Route.resource('/publicado', 'PublicationController').middleware('auth')
 Route.get('/publications_users_freelancer', 'PublicationController.getPublicationByUser').middleware('auth')
 

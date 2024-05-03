@@ -7,6 +7,8 @@
 /**
  * Resourceful controller for interacting with complaints
  */
+
+
 class ComplaintController {
   /**
    * Show a list of all complaints.
@@ -17,7 +19,7 @@ class ComplaintController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async index ({ request, response, view }) {
+  async index({ request, response, view }) {
   }
 
   /**
@@ -29,7 +31,7 @@ class ComplaintController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async create ({ request, response, view }) {
+  async create({ request, response, view }) {
   }
 
   /**
@@ -40,40 +42,54 @@ class ComplaintController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async store ({ request, response }) {
+  async getContrato(id) {
     try {
-
-      const payload = request.only(
-        [
-          "id_contrato",
-          "date_complaint",
-          "descriptioncomplaint",
-           "arquivo"
-
-        ])
-
-
-      payload.date_complaint = new Date()
-      payload.id_contrato = 1
-
-
-      const contract = await Database.table('complaints').insert(payload)
-
-      if (contract) {
-
-        return response.created({ message: 'Denuncia feita com sucesso', code: 200, data: contract })
-
-      } else {
-
-        return response.created({ message: 'Erro ao registar ao efectuar a denuncia!', code: 201, data: contract })
-      }
-
+      console.log("ID recebido em getContrato:", id);
+      const contrato = await Database
+        .select('*')
+        .from('contratos')
+        .where('id', id)
+        .first();
+      console.log("Contrato encontrado:", contrato);
+      return contrato;
     } catch (error) {
-      console.log(error)
-      return response.created({ message: 'Erro ao registar ao efectuar  a denuncia!', code: 201, data: contract })
+      console.error("Erro em encontar contrato:", error);
+      throw error;
     }
   }
 
+  async store({ request, response }) {
+    try {
+      const payload = request.only([
+        "id_contrato",
+        "date_complaint",
+        "descriptioncomplaint",
+        "arquivo"
+      ]);
+  
+      console.log("ID do contrato:", payload.id_contrato);
+      const contrato = await this.getContrato(payload.id_contrato);
+  
+      if (!contrato) {
+        return response.badRequest({ message: 'Contrato não encontrado!', code: 404 });
+      }
+  
+      payload.date_complaint = new Date();
+      payload.id_contrato = contrato.id;
+  
+      const contract = await Database.table('complaints').insert(payload);
+  
+      if (contract) {
+        return response.created({ message: 'Denúncia feita com sucesso', code: 200, data: contract });
+      } else {
+        return response.internalServerError({ message: 'Erro ao registrar a denúncia!' });
+      }
+    } catch (error) {
+      console.error("Erro ao registrar a denúncia:", error);
+      throw error;
+    }
+  }
+  
 
   /**
    * Display a single complaint.
@@ -84,7 +100,7 @@ class ComplaintController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async show ({ params, request, response, view }) {
+  async show({ params, request, response, view }) {
   }
 
   /**
@@ -96,7 +112,7 @@ class ComplaintController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async edit ({ params, request, response, view }) {
+  async edit({ params, request, response, view }) {
   }
 
   /**
@@ -107,7 +123,7 @@ class ComplaintController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async update ({ params, request, response }) {
+  async update({ params, request, response }) {
   }
 
   /**
@@ -118,7 +134,7 @@ class ComplaintController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async destroy ({ params, request, response }) {
+  async destroy({ params, request, response }) {
   }
 }
 

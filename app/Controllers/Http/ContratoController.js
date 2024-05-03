@@ -48,38 +48,63 @@ class ContratoController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async store ({ request, response }) {
+
+  async getUserFreelancer(id_user) {
+
+    const user_freelancer = await Database
+      .select('*')
+      .from('user_freelancers')
+      .where('user_freelancers.id_user', id_user)
+      .first()
+
+    return user_freelancer
+  }
+
+
+  async getUserCompany(id_user) {
+
+    const user_company = await Database
+      .select('*')
+      .from('user_companies')
+      .where('user_companies.id_user', id_user)
+      .first()
+
+    return user_company
+  }
+
+  async store ({ request, response, auth }) {
     try {
-
-      const payload = request.only(
-        [
-          "id_user_freelancer",
-          "id_user_company",
-          "descriptionService",
-          "date_contract"
-        ])
-
-
-      payload.date_contract = new Date()
-      payload.id_user_freelancer = 1
-      payload.id_user_company = 1
-
-      const contract = await Database.table('contratos').insert(payload)
-
-      if (contract) {
-
-        return response.created({ message: 'Contrato feito com sucesso', code: 200, data: contract })
-
-      } else {
-
-        return response.created({ message: 'Erro ao registar ao efectuar o Contrato!', code: 201, data: contract })
+      // Extrai os dados da solicitação
+      const { id_user_freelancer, descriptionService } = request.only(["id_user_freelancer", "descriptionService"]);
+  
+      // Busca informações do freelancer e da empresa usando o id do usuário fornecido
+      const user_freelancer = await this.getUserFreelancer(id_user_freelancer);
+      const user_company = await this.getUserCompany(auth.user.id); // Supondo que o usuário logado é a empresa
+  
+      // Verifica se o freelancer e a empresa existem
+      if (!user_freelancer || !user_company) {
+        return response.status(404).json({ message: "Freelancer ou empresa não encontrados." });
       }
-
+  
+      // Cria o payload do contrato
+      const payload = {
+        id_user_freelancer: user_freelancer.id,
+        id_user_company: user_company.id,
+        descriptionService,
+        date_contract: new Date() // Você pode querer adicionar a data do contrato aqui
+      };
+  
+      // Insere o contrato no banco de dados
+      const contract = await Database.table('contratos').insert(payload);
+  
+      // Retorna a resposta adequada
+      return response.status(201).json({ message: 'Contrato feito com sucesso', code: 200, data: contract });
     } catch (error) {
-      console.log(error)
-      return response.created({ message: 'Erro ao registar ao efectuar o Contrato!', code: 201, data: contract })
+      console.error(error);
+      return response.status(500).json({ message: 'Erro ao registrar ao efetuar o Contrato!', code: 500, error });
     }
   }
+  
 
 
 
